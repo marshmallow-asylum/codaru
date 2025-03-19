@@ -1,0 +1,4 @@
+node_modules
+.next
+.clerk
+next-env.d.ts

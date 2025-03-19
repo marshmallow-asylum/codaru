@@ -1,0 +1,38 @@
+[
+    {
+        "question": "Why did Codaru change its name from Primavera?",
+        "answer": "The name change from Primavera to Codaru was made to better reflect the mission and vision of the company. The new name, Codaru, is a combination of the words 'code' and 'haru', which means 'spring' in Japanese. This new name also allows Codaru to expand off of its original base platform of Khan Academy to a wider audience by not just being named 'Primavera', which is associated with the spring season in Italian and Spanish."
+    },
+    {
+        "question": "Will captains be participating?",
+        "answer": "No, captains will not be participating in Codaru. Captains will solely be leading, organizing, and mentoring their teams. They will be allowed to help minimally in the development of projects, BUT they will not be allowed to contribute to more than 10% of the codebase."
+    },
+    {
+        "question": "Is it a conflict of interest for the hosts to be captains as well?",
+        "answer": "No, since the hosts will have no influence over the judging process, there is no conflict of interest. The hosts will be responsible for organizing and running the event, while the judges will be responsible for evaluating the projects."
+    },
+    {
+        "question": "Do the projects have to be submitted on Khan Academy?",
+        "answer": "No! Projects can be submitted from GitHub or JSFiddle or CodePen or by any other platform where code can be shared via URL. However, if your site requires the application to be run locally, you must provide intuitive instructions on how to run the application via Docker."
+    },
+    {
+        "question": "Can we use libraries or frameworks?",
+        "answer": "Yes, you can use libraries or frameworks in your projects. However, you must clearly state which libraries or frameworks you are using in your project submission."
+    },
+    {
+        "question": "Can I collaborate with other members of my team?",
+        "answer": "Yes, you may only collaborate with members on your team. If you collaborate with others on your team, you must denote via comments who contributed which lines of code to the project. If one team member is found to have contributed less than (1/n) * 75% of the code (where n is the number of team members), the score for the entry will not be counted toward their total or the team's total."
+    },
+    {
+        "question": "If my project doesn't fit the theme, will points be deducted?",
+        "answer": "Yes, if your project does not fit the theme, points will be deducted from your overall score. The theme will be announced at the beginning of each event. We understand that this is a departure from convention but the Codaru team believes that this will allow for more creativity and innovation in the projects."
+    },
+    {
+        "question": "How will the projects be judged?",
+        "answer": "Projects will be judged according to a rubric which is slightly modified from past years. The purpose of this new rubric is to simplify the judging process and allow judges to spend more time providing feedback to participants and less time with red tape the hosts create. The rubric will be released prior to the first event. Judges will be required to submit a two to three sentence paragraph of feedback per entry."
+    },
+    {
+        "question": "How do referrals work?",
+        "answer": "For every person that you refer to join Codaru (which must be indicated when they join via the referral field), your team will receive an additional 1% added to their final score. For example, if your team has a final score of 80 and you referred 5 people, your final score will be 84 (80 + 80 * 5%). Referrals must be made prior to the end of the competition and the referred person must have completed or contributed to at least two projects."
+    }
+]

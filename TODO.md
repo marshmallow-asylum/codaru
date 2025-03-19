@@ -1,0 +1,7 @@
+- add custom fields to sign up (rank, team, referral)
+- add ranks an' teams to the site
+- mobile responsiveness
+- robots.txt file, sitemap.xml, an' a shit ton of `meta` tags on top of all this.
+- port what i can to ka (probs build a quick webp ka viewer) (includes ka sign up)
+- assign organizational roles to admin, captain, vice captain, judges, etc
+- instruct judges on docker set up.

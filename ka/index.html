@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>codaru</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script src="https://cdn.jsdelivr.net/gh/marshmallow-asylum/codaru@0.0.1/ka/shoelace_css.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/marshmallow-asylum/codaru@0.0.1/ka/krakow.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
+        <style type="text/css">
+            main {
+              min-height: 100vh;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              overflow-x: hidden;
+              background-color: #f8f4dc;
+              color: #1b1d21;
+              font-family: 'League Spartan Variable';
+            }
+            
+            body {
+              margin: 0;
+              overflow-x: hidden;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/gh/saejin-moon/ski.js@1.9.6/src/main.js"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"/>
+        <script type="module">
+                        
+            let timeline;
+            const isMobile = !!window.matchMedia("(max-width: 767px)").matches;
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        timeline.play();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.5,
+                root: null,
+            });
+            // canvas
+            const canvasElement = document.getElementsByTagName("canvas")[0]
+            const bounds = canvasElement.getBoundingClientRect()
+
+            // setup
+            set(canvasElement)
+            size(bounds.width, bounds.height)
+            canvas.onwheel = () => { }
+            window.onresize = () => {
+                const bounds = canvasElement.getBoundingClientRect()
+                size(bounds.width, bounds.height)
+            }
+
+            // stylin'
+            const vw = width / 100, vh = height / 100
+            const vmin = min(vw, vh);
+            strokeWeight(8);
+            strokeCap(ROUND);
+            strokeJoin(ROUND);
+            imageMode(CENTER); //ski.js bug, need to fix noFill(), noStroke(), etc
+            textAlign(CENTER, CENTER)
+            smooth();
+            const blossom = new Image;
+            blossom.src = "/assets/images/blossom.svg";
+            const black = color(27, 29, 33), green = color(94, 143, 76);
+
+            // utility functions
+            function dashedLine(x1, y1, x2, y2, dashLength = 15) {
+                const dx = x2 - x1, dy = y2 - y1;
+                const len = sqrt(dx * dx + dy * dy);
+                const nx = dx / len, ny = dy / len;
+                for (let i = 0; i < len; i += dashLength * 2) {
+                    line(x1 + nx * i, y1 + ny * i, x1 + nx * (i + dashLength), y1 + ny * (i + dashLength));
+                }
+            }
+            function getLength(path) {
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pathElement.setAttribute("d", path);
+                svg.appendChild(pathElement);
+                document.body.appendChild(svg);
+                const length = pathElement.getTotalLength();
+                document.body.removeChild(svg);
+                return length
+            }
+
+            //animated objects
+            const data = {
+                curves: [
+                    {
+                        string: `M ${10 * vw} ${10 * vh} L ${70 * vw} ${10 * vh} C ${100 * vw} ${10 * vh}, ${100 * vw} ${50 * vh}, ${70 * vw} ${50 * vh}`,
+                        length: 0,
+                    },
+                    {
+                        string: `M ${30 * vw} ${50 * vh} C ${0 * vw} ${50 * vh}, ${0 * vw} ${90 * vh}, ${30 * vw} ${90 * vh} L ${90 * vw} ${90 * vh}`,
+                        length: 0,
+                    }
+                ],
+                boxes: [
+                    { alpha: 0, title: "march 24", titleX: 20 * vw, titleY: 30 * vh, text: "Avatar Challenge", textX: 20 * vw, textY: 33.5 * vh },
+                    { alpha: 0, title: "march 31", titleX: 45 * vw, titleY: 30 * vh, text: "AI Challenge", textX: 45 * vw, textY: 33.5 * vh },
+                    { alpha: 0, title: "april 7", titleX: 70 * vw, titleY: 30 * vh, text: "Under One Thousand\nCharacters Challenge", textX: 70 * vw, textY: 34.5 * vh },
+                    { alpha: 0, title: "april 10", titleX: 50 * vw, titleY: 47.75 * vh, text: "Escape Room Challenge", textX: 50 * vw, textY: 51.25 * vh },
+                    { alpha: 0, title: "april 14", titleX: 40 * vw, titleY: 70 * vh, text: "Crossfit Challenge", textX: 40 * vw, textY: 66 * vh },
+                    { alpha: 0, title: "april 21", titleX: 65 * vw, titleY: 70 * vh, text: "Finale", textX: 65 * vw, textY: 66 * vh },
+                    { alpha: 0, title: "may 5", titleX: 90 * vw, titleY: 70 * vh, text: "Awards Ceremony", textX: 90 * vw, textY: 66 * vh },
+                ],
+                dots: [
+                    { x: 20 * vw, y: 10 * vh, size: 0 },
+                    { x: 45 * vw, y: 10 * vh, size: 0 },
+                    { x: 70 * vw, y: 10 * vh, size: 0 },
+                    { x: 40 * vw, y: 90 * vh, size: 0 },
+                    { x: 65 * vw, y: 90 * vh, size: 0 },
+                    { x: 90 * vw, y: 90 * vh, size: 0 },
+                ],
+                dashes: [
+                    { x1: 20 * vw, y1: 13 * vh, x2: 20 * vw, y2: 25 * vh, length: 0 },
+                    { x1: 45 * vw, y1: 13 * vh, x2: 45 * vw, y2: 25 * vh, length: 0 },
+                    { x1: 70 * vw, y1: 13 * vh, x2: 70 * vw, y2: 25 * vh, length: 0 },
+                    { x1: 40 * vw, y1: 87 * vh, x2: 40 * vw, y2: 75 * vh, length: 0 },
+                    { x1: 65 * vw, y1: 87 * vh, x2: 65 * vw, y2: 75 * vh, length: 0 },
+                    { x1: 90 * vw, y1: 87 * vh, x2: 90 * vw, y2: 75 * vh, length: 0 },
+                ],
+                flowers: [
+                    { x: 15 * vw, y: 43 * vh, rotate: random(360) | 0 },
+                    { x: 85 * vw, y: 55 * vh, rotate: random(360) | 0 },
+                ],
+                flowerScale: 0,
+                flowerRotate: 0,
+                add(index) {
+                    timeline.to(this.dots[index], {
+                        size: 20,
+                        duration: 0.3,
+                        ease: "sine.inOut"
+                    })
+                    timeline.to(this.dashes[index], {
+                        length: 12,
+                        duration: 0.5,
+                        ease: "sine.inOut"
+                    })
+                    timeline.to(this.boxes[index >= 3 ? index + 1 : index], {
+                        alpha: 255,
+                        duration: 0.3,
+                        ease: "sine.inOut"
+                    })
+                },
+                init() {
+                    this.curves.forEach((curve, i) => {
+                        this.curves[i].maxLength = getLength(curve.string);
+                        this.curves[i].path = new Path2D(curve.string);
+                    })
+                },
+                update () {
+                    clear(); 
+                    data.curves.forEach(curve => {
+                        if (curve.length > 0) {
+                            stroke(black);
+                            strokeWeight(8);
+                            noFill();
+                            ctx.setLineDash([curve.length, curve.maxLength]);
+                            ctx.stroke(curve.path);
+                        }
+                    })
+                    data.dots.forEach(dot => {
+                        if (dot.size > 0) {
+                            noStroke();
+                            fill(black);
+                            ellipse(dot.x, dot.y, dot.size, dot.size);
+                        }
+                    });
+                    data.dashes.forEach((dash, i) => {
+                        if(dash.length > 0){
+                            stroke(green);
+                            strokeWeight(4);
+                            ctx.setLineDash([dash.length, 12])
+                            dashedLine(dash.x1, dash.y1, dash.x2, dash.y1 + (i < 3 ? dash.length : -dash.length) * vh);
+                        }
+                    })
+                    data.boxes.forEach(box => {
+                        if (box.alpha > 0) {
+                            noStroke();
+                            fill(green, box.alpha);
+                            textFont("League Spartan Variable bold", 4 * vmin);
+                            text(box.title, box.titleX, box.titleY);
+                            textFont("League Spartan Variable", 3 * vmin);
+                            text(box.text, box.textX, box.textY);
+                        }
+                    });
+                    data.flowers.forEach(flower => {
+                        if (data.flowerScale > 0) {
+                            pushMatrix();
+                            translate(flower.x, flower.y);
+                            rotate(data.flowerRotate + flower.rotate);
+                            scale(data.flowerScale);
+                            image(blossom, 0, 0, 10 * vmin, 10 * vmin);
+                            popMatrix();
+                        }
+                    });
+                }
+            }
+            data.init();
+
+            // gsap timeline
+            timeline = gsap.timeline({
+                onUpdate: data.update,
+                paused: true
+            });
+
+            timeline.to(data.curves[0], {
+                length: 10 * vw,
+                duration: 0.7,
+                ease: "sine.inOut"
+            });
+            data.add(0);
+            timeline.to(data.curves[0], {
+                length: 35 * vw,
+                duration: 0.7,
+                ease: "sine.inOut"
+            });
+            data.add(1);
+            timeline.to(data.curves[0], {
+                length: 60 * vw,
+                duration: 0.7,
+                ease: "sine.inOut"
+            });
+            data.add(2);
+            timeline.to(data.curves[0], {
+                length: data.curves[0].maxLength,
+                duration: 0.7,
+                ease: "sine.inOut"
+            })
+            timeline.to(data.boxes[3], {
+                alpha: 255,
+                duration: 0.3,
+                ease: "sine.inOut"
+            })
+            const diff = data.curves[1].maxLength - 50 * vw;
+            timeline.to(data.curves[1], {
+                length: diff,
+                duration: 0.7,
+                ease: "sine.inOut"
+            })
+            data.add(3);
+            timeline.to(data.curves[1], {
+                length: diff + 25 * vw,
+                duration: 0.7,
+                ease: "sine.inOut"
+            })
+            data.add(4);
+            timeline.to(data.curves[1], {
+                length: data.curves[1].maxLength,
+                duration: 0.7,
+                ease: "sine.inOut"
+            })
+            data.add(5);
+            timeline.to(data, {
+                flowerScale: 0.7,
+                flowerRotate: 360,
+                duration: 1,
+                ease: "sine.inOut"
+            })
+            observer.observe(canvas);
+
+            console.log("Timeline progress:", timeline.progress());
+            if (timeline.progress() === 0) {
+                timeline.play();
+            }
+        </script>
+    </head>
+    <body>
+        <main>
+              {/* Hero Section */}
+              <div className="w-full h-screen flex justify-around items-center font-[League Spartan Variable] relative">
+                <img
+                  className="ml-[-5vw] h-[75%] object-contain"
+                  src="/assets/images/krakow.webp"
+                  alt="retrofuturistic computer adorned with flowers"
+                />
+                <div className="flex flex-col justify-center items-center w-1/2 h-full">
+                  <div className="flex justify-center items-center">
+                    <img
+                      className="w-[12vmin] h-[12vmin] object-contain"
+                      src="/assets/images/logo.svg"
+                      alt="The logo for Codaru."
+                    />
+                    <span className="text-[12vmin] font-[League Spartan Variable] font-bold">
+                      codaru
+                    </span>
+                  </div>
+                  <span className="text-[5vmin] font-[League Spartan Variable]">
+                    code. collaborate. compete.
+                  </span>
+                  <div className="flex p-4 justify-between items-center">
+                    <a href="https://discord.gg/Qc9MeSPD6H">
+                      <img
+                        className="h-8 mr-6 object-contain"
+                        src="/assets/images/discord.png"
+                        alt="Discord logo"
+                      />
+                    </a>
+                    <a href="mailto:support@codaru.org">
+                      <Mail color="#5e8f4c" className="h-9 w-9 mr-6" />
+                    </a>
+                    <a href="https://hcb.hackclub.com/donations/start/codaru">
+                      <CircleDollarSign color="#5e8f4c" className="h-9 w-9" />
+                    </a>
+                  </div>
+                  <SignedOut>
+                    <a
+                      href="/sign-in"
+                      className="signup-button group mt-[1vh] bg-[#5e8f4c] h-[8vmin] rounded-[5px] flex justify-center items-center cursor-pointer relative overflow-hidden transition-colors w-[60%] text-[#f8f4dc] font-[Outfit Variable] text-[5vmin] font-semibold active:bg-[#7e9f6c] active:transition-colors active:duration-300"
+                    >
+                      <span className="text absolute transition-transform duration-300 group-hover:translate-y-3/2">
+                        sign in
+                      </span>
+                      <ArrowRight className="w-10 h-10 absolute transition-transform duration-300 transform -translate-y-4/2 group-hover:translate-y-0" />
+                    </a>
+                  </SignedOut>
+                </div>
+                <UserButton
+                  appearance={{
+                    elements: {
+                      rootBox: "absolute top-0 right-0 m-4",
+                      avatarImage: "w-15 h-15",
+                      avatarBox: "w-15 h-15",
+                    },
+                  }}
+                />
+              </div>
+        
+              {/* Timeline Section */}
+              <div className="flex justify-between items-center w-full h-screen">
+                <canvas className="w-[65%] h-full ml-[-2.5%]">
+                  A timeline of the events of Codaru. The timeline winds around in a reverse S
+                  pattern. The events are represented by circles and connected to text boxes by
+                  dashed lines. The events are as follows: Avatar Challenge (March 17), AI
+                  Challenge (March 24), Under One Thousand Character Challenge (March 31),
+                  Escape Room Challenge (April 3), Crossfit Challenge (April 7), Finale (April
+                  14), and Awards Ceremony (April 28).
+                </canvas>
+                <img
+                  className="h-[120%] mr-[-5vw] object-contain"
+                  src="/assets/images/clock.webp"
+                  alt="retrofuturistic clock adorned with flowers"
+                />
+              </div>
+        
+              {/* About Section */}
+              <div className="flex justify-between items-center w-full h-screen">
+                <img
+                  className="w-1/2 ml-[-5vw] object-contain"
+                  src="/assets/images/compass.webp"
+                  alt="retrofuturistic compass adorned with flowers"
+                />
+                <div className="flex flex-col justify-center items-center w-1/2 h-full pl-[4vw] pr-[8vw] text-right">
+                  <span className="text-[12vmin] font-bold font-[League Spartan Variable]">
+                    about
+                  </span>
+                  <p className="font-[Outfit Variable] text-[3vmin] font-light">
+                    Codaru is an annual spring coding competition open to programmers of all ages
+                    and skill levels—from complete beginners to seasoned professionals. Held
+                    entirely online, the competition is designed to fit your schedule, with each
+                    challenge lasting a full week, allowing you to participate whenever it’s
+                    convenient. You’ll join one of six teams, working together with your teammates
+                    to take on challenges and compete against the others. Codaru’s mission is to
+                    provide an inclusive and engaging space where everyone can develop their skills
+                    and grow as programmers.
+                  </p>
+                </div>
+              </div>
+        
+              {/* FAQ Section */}
+              <div className="flex justify-between items-center w-full h-screen">
+                <div className="flex justify-center items-center w-1/2 h-full flex-col px-[7.5vw] mr-[2.5vw] flex-1">
+                  <span className="text-[12vmin] font-bold font-[League Spartan Variable]">faq</span>
+                  <Accordion variant="separated" className="w-full">
+                    {faq.map((item, index) => (
+                          <Accordion.Item key={index} value={item.question} bg="#5e8f4c" className="font-[Outfit Variable] text-8">
+                            <Accordion.Control c="#f8f4dc" className="font-bold">{item.question}</Accordion.Control>
+                            <Accordion.Panel c="#f8f4dc" className="font-light">{item.answer}</Accordion.Panel>
+                          </Accordion.Item>
+                    ))}
+                  </Accordion>
+                </div>
+                <img
+                  className="mr-[-2vw] object-contain"
+                  src="/assets/images/question.webp"
+                  alt="retrofuturistic question mark adorned with flowers"
+                />
+              </div>
+        
+              {/* Team Section */}
+              <div className="flex justify-between items-center w-full h-screen">
+                <img
+                  className="ml-[-15vw] w-2/3 object-contain"
+                  src="/assets/images/hive.webp"
+                  alt="retrofuturistic beehive adorned with flowers"
+                />
+                <div className="flex flex-col justify-center items-center flex-1 h-full">
+                  <span className="text-[12vmin] font-bold font-[League Spartan Variable]">team</span>
+                  <div className="font-[Outfit Variable] text-[2.5vmin] flex flex-col justify-center items-start w-4/5 pt-4">
+                    {teamMembers.map((member, i) => (
+                      <div key={i} className="flex justify-center items-center w-full m-2">
+                        <div className="flex justify-center items-center rounded-full border-3">
+                          <img
+                            className="w-20 h-20 rounded-full object-cover"
+                            src={member.image}
+                            alt={`Team member ${member.name}`}
+                          />
+                        </div>
+                        <div className="flex flex-col justify-center items-start ml-4 w-2/3">
+                          <span>
+                            <span className="font-bold">{member.name}</span> |{" "}
+                            <span className="italic">{member.title}</span>
+                          </span>
+                          <span className="font-light">{member.description}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+        </main>
+    </body>
+</html>
