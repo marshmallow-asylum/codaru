@@ -1,4 +1,4 @@
-export default function Dragon () {
+export default function Tiger () {
     return (
         <>
         </>

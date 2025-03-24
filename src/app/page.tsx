@@ -12,25 +12,25 @@ const teamMembers = [
   {
     name: "saejin",
     title: "director",
-    description: "God.",
+    description: "clown of the century.",
     image: "/assets/images/avatars/saejin.webp",
   },
   {
     name: "dominic",
     title: "director of public relations",
-    description: "MY POM POM",
+    description: "trapeze artist.",
     image: "/assets/images/avatars/dom.webp",
   },
   {
     name: "malav",
     title: "crisis manager",
-    description: "malav is a ghost or smth i swear.",
+    description: "juggler.",
     image: "/assets/images/avatars/malav.webp",
   },
   {
     name: "shriya",
     title: "director of operations",
-    description: "alias for mia khalifa.",
+    description: "emcee.",
     image: "/assets/images/avatars/shriya.webp",
   },
 ];
