@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { MantineProvider } from '@mantine/core';
 import "@fontsource-variable/league-spartan";
 import "@fontsource-variable/outfit";
+import "@fontsource/maple-mono";
 import '@mantine/core/styles.css';
 import "./globals.css";
 
