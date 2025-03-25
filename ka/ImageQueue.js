@@ -83,7 +83,9 @@ class ImageQueue {
             ImageQueue.bitmapCache.set(name, bitmap);
             return bitmap;
         } catch (error) {
-            console.error(`Failed to load image: ${name}`, error);
+            console.error(`Failed to load image: ${name}`);
+            console.error(error);
+            throw error;
         }
     }
 
@@ -98,12 +100,12 @@ class ImageQueue {
         });
     }
     static async toBitmap(name) {
-        if(name in bitmapHash){
-            return bitmapHash[name]
+        if (ImageQueue.bitmapCache.has(name)) {
+            return ImageQueue.bitmapCache.get(name);
         }
-        let string = window["img_" + name]
+        let string = window["img_" + name];
         string = string.split(",")[1];
-        const binary = atob(str);
+        const binary = atob(string);
         const length = binary.length;
         const bytes = new Uint8Array(length);
         for (let i = 0; i < length; i++) {
@@ -113,7 +115,7 @@ class ImageQueue {
         await decoder.tracks.ready;
         const frame = (await decoder.decode()).image;
         const bitmap = await createImageBitmap(frame);
-        bitmapHash[name] = bitmap;
+        ImageQueue.bitmapCache.set(name, bitmap);
         return bitmap;
     }
 }
