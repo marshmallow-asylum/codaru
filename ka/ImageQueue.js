@@ -1,7 +1,8 @@
 class ImageQueue {
     static bitmapCache = new Map();
 
-    constructor(context){
+    constructor(context, version="latest"){
+        this.version = version;
         this.ctx = context;
         this.queue = [];
         this.isProcessing = false;
@@ -74,9 +75,9 @@ class ImageQueue {
         }
         this.isProcessing = false;
     }
-    async loadImage(name, version="latest") {
+    async loadImage(name) {
         if (ImageQueue.bitmapCache.has(name)) return ImageQueue.bitmapCache.get(name);
-        const url = `https://cdn.jsdelivr.net/gh/marshmallow-asylum/codaru@${version}/ka/images/${name}.js`;
+        const url = `https://cdn.jsdelivr.net/gh/marshmallow-asylum/codaru@${this.version}/ka/images/${name}.js`;
         try {
             await ImageQueue.loadScript(url);
             const bitmap = await ImageQueue.toBitmap(name);
