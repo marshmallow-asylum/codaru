@@ -76,7 +76,7 @@ class ImageQueue {
     }
     async loadImage(name, version="latest") {
         if (ImageQueue.bitmapCache.has(name)) return ImageQueue.bitmapCache.get(name);
-        const url = `https://cdn.jsdelivr.net/gh/marshmallow-asylum@${version}/codaru/ka/images/${name}.js`;
+        const url = `https://cdn.jsdelivr.net/gh/marshmallow-asylum/codaru@${version}/ka/images/${name}.js`;
         try {
             await ImageQueue.loadScript(url);
             const bitmap = await ImageQueue.toBitmap(name);
@@ -84,7 +84,6 @@ class ImageQueue {
             return bitmap;
         } catch (error) {
             console.error(`Failed to load image: ${name}`, error);
-            throw error;
         }
     }
 
