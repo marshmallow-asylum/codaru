@@ -34,7 +34,7 @@ class ImageQueue {
         return bitmaps;
     }
     async get(name){
-        if(!ImageQueue.bitmapCache.has(name)) await this.loadAsync(name);
+        if(!ImageQueue.bitmapCache.has(name)) await this.load(name);
         return  ImageQueue.bitmapCache.get(name);
     }
     async draw(name, x, y, options = {}) {
@@ -56,6 +56,9 @@ class ImageQueue {
             else if(options.scale) {
                 const { scale } = options;
                 this.ctx.drawImage(bitmap, x, y, bitmap.width * scale, bitmap.height * scale);
+            }
+            else {
+                this.ctx.drawImage(bitmap, x, y);
             }
         } else {
             console.error(`Image not found: ${name}`);
