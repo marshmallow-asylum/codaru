@@ -9,33 +9,33 @@ class ImageQueue {
 
     /* load methods */
     load(name){
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (ImageQueue.bitmapCache.has(name)) {
                 resolve(ImageQueue.bitmapCache.get(name));
             } else {
                 this.queue.push(name);
-                if (!this.isProcessing) this.processQueue().then(() => {
+                if (!this.isProcessing){
+                    await this.processQueue();
                     if (ImageQueue.bitmapCache.has(name)) {
                         resolve(ImageQueue.bitmapCache.get(name));
                     } else {
                         reject(new Error(`Failed to load image: ${name}`));
                     }
-                }).catch(reject);
+                }
             }
         });
     }
     loadAll(names){
-        return Promise.all(names.map(name => this.loadImage(name)));
+        return Promise.all(names.map(name => this.load(name)));
     }
 
     /* get methods */
     async getAll(names){
-        const bitmaps = await Promise.all(names.map(name => this.get(name)));
-        return bitmaps;
+        return Promise.all(names.map(name => this.get(name)));
     }
     async get(name){
-        if(!ImageQueue.bitmapCache.has(name)) await this.load(name);
-        return  ImageQueue.bitmapCache.get(name);
+        if(!ImageQueue.bitmapCache.has(name)) return await this.load(name);
+        return ImageQueue.bitmapCache.get(name);
     }
     async draw(name, x, y, options = {}) {
         const bitmap = await this.get(name);
