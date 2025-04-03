@@ -22,7 +22,7 @@ export default function OnboardingComponent() {
     }
   }
   return (
-    <div>
+    <div className="min-h-screen">
       <h1>Welcome</h1>
       <form action={handleSubmit}>
         <div>
