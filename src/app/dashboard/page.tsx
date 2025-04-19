@@ -21,7 +21,7 @@ export default function Dashboard() {
                                 codaru
                             </span>
                         </a>
-                        <UserProfile />
+                        <UserProfile routing="hash" />
                     </div>
                     <img
                         className="w-1/2 ml-[-10vw]"

@@ -1,44 +1,43 @@
-'use client'
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { OnboardingForm } from "@/components/OnboardingForm";
+import { Metadata } from "next";
 
-import * as React from 'react'
-import { useUser } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
-import { completeOnboarding } from './_actions'
+export const metadata: Metadata = {
+  title: "Onboarding.",
+  description: "Finish setting up your account by selecting your role.",
+};
 
-export default function OnboardingComponent() {
-  const [error, setError] = React.useState('')
-  const { user } = useUser()
-  const router = useRouter()
+export default async function OnboardingPage() {
+  const user = await currentUser();
 
-  const handleSubmit = async (formData: FormData) => {
-    const res = await completeOnboarding(formData)
-    if (res?.message) {
-      // Reloads the user's data from the Clerk API
-      await user?.reload()
-      router.push('/')
-    }
-    if (res?.error) {
-      setError(res?.error)
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  if (user.publicMetadata?.role) {
+    redirect("/");
+  }
+
+  let githubUsername: string | null = null;
+  if (user.externalAccounts && user.externalAccounts.length > 0) {
+    const githubAccount = user.externalAccounts.find(
+      (acc) => acc.provider === "oauth_github" && acc.username,
+    );
+    if (githubAccount && githubAccount.username) {
+      githubUsername = `https://github.com/${githubAccount.username}`;
     }
   }
-  return (
-    <div className="min-h-screen">
-      <h1>Welcome</h1>
-      <form action={handleSubmit}>
-        <div>
-          <label>Application Name</label>
-          <p>Enter the name of your application.</p>
-          <input type="text" name="applicationName" required />
-        </div>
 
-        <div>
-          <label>Application Type</label>
-          <p>Describe the type of your application.</p>
-          <input type="text" name="applicationType" required />
-        </div>
-        {error && <p className="text-red-600">Error: {error}</p>}
-        <button type="submit">Submit</button>
-      </form>
+  return (
+    <div className="flex flex-col w-full h-screen justify-center items-center">
+      <OnboardingForm initialGithubUsername={githubUsername} />
+      <img
+          className="h-1/2"
+          loading="lazy"
+          src="/assets/images/signpost.webp"
+          alt="retrofuturistic signpost overgrown with plants"
+      />
     </div>
-  )
+  );
 }
