@@ -27,4 +27,4 @@ export const ONBOARDING_STEP_INDICES = {
 /**
  * Optional: Options for the "How did you discover us?" dropdown.
  */
-export type DISCOVERY_OPTIONS = ['Friend', 'Social Media (LinkedIn, Instagram)', 'Newsletter', 'Khan Academy', "Online Community (Discord, Slack, Forum)", 'Other', ""] | undefined;
+export type DISCOVERY_OPTIONS = ['Friend', "TKS", 'Social Media (LinkedIn, Instagram)', 'Newsletter', 'Khan Academy', "Online Community (Discord, Slack, Forum)", 'Other', ""] | undefined;

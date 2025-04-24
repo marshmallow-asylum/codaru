@@ -22,4 +22,4 @@ ENV NODE_ENV=production
 
 EXPOSE 7376
 
-CMD ["bun", "start"]
+CMD ["bun", "--bun", "run", "start"]

@@ -10,35 +10,29 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: "Sae-Jin Moon",
-    title: "Director",
+    title: "Executive Director",
     description: "Mastermind of the competition.",
     image: "/assets/images/avatars/saejin.webp",
   },
   {
     name: "Dominic Rocco",
     title: "Director of Public Relations",
-    description: "Handles all things PR and outreach.",
+    description: "All things people.",
     image: "/assets/images/avatars/dom.webp",
   },
   {
     name: "Malav Patel",
     title: "Crisis Manager",
-    description: "Manages any crises that arise during the competition.",
+    description: "The fire extinguisher.",
     image: "/assets/images/avatars/malav.webp",
-  },
-  {
-    name: "Shriya Vasudevan",
-    title: "Director of Operations",
-    description: "Ensures the competition runs smoothly.",
-    image: "/assets/images/avatars/shriya.webp",
-  },
+  }
 ];
 
 export default function TeamSection() {
   return (
-    <div className="flex flex-col-reverse md:flex-row-reverse justify-center items-between md:justify-between md:items-center w-full my-5 overflow-x-hidden">
+    <div className="flex flex-col-reverse md:flex-row-reverse justify-center items-center md:justify-between md:items-center w-full my-5 overflow-x-hidden">
       <img
-        className="md:-mr-100 md:w-2/3 h-3/4 object-contain"
+        className="md:-mr-100 md:w-2/3 w-full -mr-50 object-contain"
         src="/assets/images/hive.webp"
         alt="retrofuturistic beehive adorned with flowers"
       />

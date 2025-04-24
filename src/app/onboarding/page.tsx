@@ -33,7 +33,7 @@ export default async function OnboardingPage() {
     <div className="flex flex-col w-full h-screen justify-center items-center">
       <OnboardingForm initialGithubUsername={githubUsername} />
       <img
-          className="h-1/2"
+          className="hidden md:block h-1/2"
           loading="lazy"
           src="/assets/images/signpost.webp"
           alt="retrofuturistic signpost overgrown with plants"

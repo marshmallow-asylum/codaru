@@ -10,7 +10,10 @@ module.exports = {
           primary: '#5e8f4c', // Example primary color
           background: '#f8f4dc', // Example background color
           text: '#1b1d21', // Example text color
-        }
+        },
+        transitionProperty: {
+          width: 'width',
+        },
       },
     },
   }

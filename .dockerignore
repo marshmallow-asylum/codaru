@@ -1,5 +1,6 @@
 node_modules
 .next
 .clerk
+.zed
 next-env.d.ts
 ka

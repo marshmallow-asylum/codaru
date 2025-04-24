@@ -9,7 +9,7 @@ export default function SignUpPage() {
             </Head>
             <div className="flex w-full h-screen justify-between items-center">
                 <img
-                    className="w-1/2 ml-[-10vw]"
+                    className="hidden md:block w-1/2 ml-[-10vw]"
                     loading="lazy"
                     src="/assets/images/cog.webp"
                     alt="retrofuturistic cog overgrown with plants"

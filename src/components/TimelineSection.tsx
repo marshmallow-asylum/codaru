@@ -21,43 +21,37 @@ const timelineEvents: TimelineEventProps[] = [
   {
     title: "Registration",
     description: "Contestants sign up for the competition, are drafted to a team, and prepare for the first challenge.",
-    date: "March 24",
+    date: "Begins March 28",
     icon: <IconForms size={20} />
-  },
-  {
-    title: "AI Challenge",
-    description: "Contestants will have to incorporate an AI-generated code snippet into their projects.",
-    date: "April 14",
-    icon: <IconAi size={20} color="#5e8f4c" />
-  },
-  {
-    title: "Crossfit Challenge",
-    description: "Contestants will have to complete sections of a project's codebase and then hand it off to the next contestant.",
-    date: "April 21",
-    icon: <IconBarbell size={20} color="#5e8f4c" />
   },
   {
     title: "Under 1K Characters Challenge",
     description: "Contestants will have to create their project in under 1000 characters.",
-    date: "April 28",
+    date: "April 28 to May 5",
     icon: <IconCode size={20} color="#5e8f4c" />
   },
   {
     title: "Escape Room Challenge",
     description: "Contestants must solve a mystery by completing a series of coding puzzles.",
-    date: "May 1",
+    date: "May 5 to May 12",
     icon: <IconLockOpen size={20} color="#5e8f4c" />
+  },
+  {
+    title: "Crossfit Challenge",
+    description: "Contestants will have to complete sections of a project's codebase and then hand it off to the next contestant.",
+    date: "May 12 to May 26",
+    icon: <IconBarbell size={20} color="#5e8f4c" />
   },
   {
     title: "Finale",
     description: "Contestants must collaborate with their entire team to create one grand project.",
-    date: "May 5",
+    date: "May 26 to June 16",
     icon: <IconTrophy size={20} color="#5e8f4c" />
   },
   {
     title: "Awards Ceremony",
     description: "Awards will be given to the teams and contestants who outperformed their peers in various categories.",
-    date: "May 26",
+    date: "June 20",
     icon: <IconMedal2 size={20} color="#5e8f4c" />
   }
 ];
@@ -87,7 +81,7 @@ export default function TimelineSection() {
         </Timeline>
       </div>
       <img
-        className="h-6/5 md:-mr-5 object-contain"
+        className="w-5/4 md:w-auto md:h-6/5 ml-25 md:-mr-20 object-contain"
         src="/assets/images/clock.webp"
         alt="retrofuturistic clock adorned with flowers"
       />

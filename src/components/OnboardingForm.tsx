@@ -47,18 +47,27 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
             .string()
             .optional()
             .or(z.literal(''))
-            .refine((val) => PORTFOLIO_URL_REGEX.test(String(val)), {
+            .refine((val) => !val || PORTFOLIO_URL_REGEX.test(String(val)), {
                 message: "Invalid Portfolio URL format",
             }),
         githubUrl: z
             .string()
             .optional()
             .or(z.literal(''))
-            .refine((val) => GITHUB_URL_REGEX.test(String(val)), {
+            .refine((val) => !val || GITHUB_URL_REGEX.test(String(val)), {
                 message: "Invalid GitHub URL format",
             }),
         discovery: z.string().optional(),
-    });
+    }).refine(
+        (data) => {
+            const hasPortfolio = !!data.portfolioUrl;
+            const hasGithub = !!data.githubUrl;
+            return hasPortfolio || hasGithub;
+        },
+        {
+            message: "At least one URL (Portfolio or GitHub) must be provided",
+        }
+    );
 
     const form = useForm<z.infer<typeof participantFormSchema>>({
         validate: zodResolver(participantFormSchema),
@@ -195,7 +204,7 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
     }
 
     return (
-        <Container size="md" mt="xl" className="p-4 flex justify-center items-center w-2/3">
+        <Container size="md" mt="xl" className="p-4 flex justify-center items-center md:w-2/3 w-full">
             <Paper withBorder shadow="md" p="xl" radius="md" pos="relative" className="bg-[#5e8f4c] w-full">
                 <LoadingOverlay visible={isLoading} />
 
