@@ -26,6 +26,8 @@ import { PORTFOLIO_URL_REGEX, GITHUB_URL_REGEX } from '@/lib/validation';
 import { updateUserRoleAction } from '@/app/onboarding/actions';
 import { z } from 'zod';
 import { zodResolver } from '@mantine/form';
+import { useSession } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 interface OnboardingFormProps {
     initialGithubUsername?: string | null;
@@ -40,7 +42,8 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
     const [serverError, setServerError] = useState<string | null>(null);
     const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitted' | 'error'>('idle');
     const [participantCompleted, setParticipantCompleted] = useState(false);
-
+    const { session, isLoaded } = useSession(); // Get session hook
+    const router = useRouter();
 
     const participantFormSchema = z.object({
         portfolioUrl: z
@@ -91,9 +94,16 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
             try {
                 const result = await updateUserRoleAction({ role });
                 if (result.success) {
-                    setSubmissionStatus('submitted');
-                    localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_STEP);
-                    localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_ROLE);
+                   if (isLoaded && session) {
+                       await session.reload(); // Reload the session to get updated claims
+                        console.log('Session reloaded successfully. Navigating to /');
+                        // Clear local storage before redirect
+                       localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_STEP);
+                       localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_ROLE);
+                       router.push('/'); // Navigate *after* session reload
+                   } else {
+                       window.location.href = '/';
+                   }
                 } else {
                     setServerError(result.error || 'An error occurred.');
                     setSubmissionStatus('error');
@@ -128,10 +138,16 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
                 discovery: values.discovery as DISCOVERY_OPTIONS 
             });
             if (result.success) {
-                setParticipantCompleted(true);
-                setActiveStep((current) => current + 1);
-                localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_STEP);
-                localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_ROLE);
+               if (isLoaded && session) {
+                   await session.reload(); // Reload the session to get updated claims
+                    console.log('Session reloaded successfully. Navigating to /');
+                    // Clear local storage before redirect
+                   localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_STEP);
+                   localStorage.removeItem(LOCAL_STORAGE_KEYS.ONBOARDING_ROLE);
+                   router.push('/'); // Navigate *after* session reload
+               } else {
+                   window.location.href = '/';
+               }
             } else {
                 setServerError(result.error || 'An error occurred.');
                 setSubmissionStatus('error');
@@ -269,7 +285,7 @@ export function OnboardingForm({ initialGithubUsername }: OnboardingFormProps) {
                                     labelProps={{ c: '#f8f4dc' }}
                                     label="How did you discover this platform?"
                                     placeholder="Select..."
-                                    data={['Friend', 'Social Media (LinkedIn, Instagram)', 'Newsletter', 'Khan Academy', "Online Community (Discord, Slack, Forum)", 'Other']}
+                                    data={['Friend', 'TKS', 'Social Media (LinkedIn, Instagram)', 'Newsletter', 'Khan Academy', "Online Community (Discord, Slack, Forum)", 'Other']}
                                     {...form.getInputProps('discovery')}
                                 />
 

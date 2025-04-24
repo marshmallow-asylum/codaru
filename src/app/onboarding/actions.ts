@@ -59,9 +59,7 @@ export async function updateUserRoleAction(
     console.log(
       `updateUserRoleAction: Successfully updated metadata for user ${userId}. Role set to "${role}", approved: false.`,
     );
-
-    revalidatePath("/onboarding");
-
+    
     return { success: true };
   } catch (error) {
     console.error(

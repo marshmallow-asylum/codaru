@@ -36,22 +36,22 @@ function SocialLinks() {
     <div className="flex p-4 justify-between items-center">
       <a href="https://discord.gg/Qc9MeSPD6H">
         <img
-          className="h-8 mr-6 object-contain"
+          className="md:h-11 h-8 mr-6 object-contain"
           src="/assets/images/discord.png"
           alt="Discord logo"
         />
       </a>
       <a href="mailto:support@codaru.org">
-        <IconMail color="#5e8f4c" className="h-9 w-9 mr-6" />
+        <IconMail color="#5e8f4c" className="h-9 w-9 md:h-15 md:w-15 mr-6" />
       </a>
       <a href="https://hcb.hackclub.com/donations/start/codaru">
-        <IconCoin color="#5e8f4c" className="h-9 w-9 mr-6" />
+        <IconCoin color="#5e8f4c" className="h-9 w-9 md:h-15 md:w-15 mr-6" />
       </a>
       <UserButton
         appearance={{
           elements: {
-            avatarImage: "md:w-15 md:h-15 w-9 h-9",
-            avatarBox: "md:w-15 md:h-15 w-9 h-9",
+            avatarImage: "md:w-13 md:h-13 w-9 h-9",
+            avatarBox: "md:w-13 md:h-13 w-9 h-9",
           },
         }}
       />
