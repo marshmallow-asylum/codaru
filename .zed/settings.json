@@ -1,9 +1,0 @@
-{
-  "autosave": {
-    "after_delay": {
-      "milliseconds": 100
-    }
-  },
-  "soft_wrap": "editor_width",
-  "tab_size": 4
-}
